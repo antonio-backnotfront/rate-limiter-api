@@ -206,3 +206,6 @@ Temporary Items
 ### macOS Patch ###
 # iCloud generated files
 *.icloud
+
+### secrets
+application-dev.yml
