@@ -1,9 +1,6 @@
 package io.github.antonio.backnotfront.ratelimiter.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +13,7 @@ public class Policy {
     private Long id;
     private Integer capacity;
     private Long windowSize;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User user;
 }

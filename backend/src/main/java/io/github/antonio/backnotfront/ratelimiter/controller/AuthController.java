@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -13,6 +15,7 @@ public class AuthController {
 
     @GetMapping("signup")
     public ResponseEntity<?> signup() {
+
         return new ResponseEntity<>("not implemented yet", HttpStatus.NOT_IMPLEMENTED);
     }
 

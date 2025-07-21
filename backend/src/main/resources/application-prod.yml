@@ -5,6 +5,12 @@ spring:
       ddl-auto: none
     show-sql: true
   datasource:
+    url: ${MYSQL_URL}
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
-    url: ${MYSQL_URL}
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
