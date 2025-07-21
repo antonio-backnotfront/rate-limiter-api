@@ -1,16 +1,13 @@
 package io.github.antonio.backnotfront.ratelimiter.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "User")
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Setter
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,5 +18,4 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "roleId")
     private Role role;
-
 }
