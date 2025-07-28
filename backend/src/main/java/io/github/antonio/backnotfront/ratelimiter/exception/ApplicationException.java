@@ -1,12 +1,15 @@
 package io.github.antonio.backnotfront.ratelimiter.exception;
 
-import lombok.Getter;
 
-@Getter
-public class ApplicationException extends Exception {
+public class ApplicationException extends RuntimeException {
     private final int statusCode;
+
     public ApplicationException(String msg, int statusCode) {
         super(msg);
         this.statusCode = statusCode;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
     }
 }

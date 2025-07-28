@@ -8,7 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class RateLimiterApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RateLimiterApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RateLimiterApplication.class, args);
+    }
 }

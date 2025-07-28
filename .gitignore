@@ -210,3 +210,6 @@ Temporary Items
 ### secrets
 application-dev.yml
 gradle.properties
+
+### env
+.env
