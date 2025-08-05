@@ -6,10 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,16 @@ public class GlobalExceptionHandler {
         logger.error(Arrays.toString(exception.getStackTrace()));
         Map<String, Object> body = ErrorBodyFactory.generateBody("Internal Server Error.", 500);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleException(MethodArgumentNotValidException exception) {
+        Map<String, String> errorBody = new HashMap<>();
+        for (FieldError error : exception.getFieldErrors()){
+            errorBody.put(error.getField(), error.getDefaultMessage());
+        }
+        Map<String, Object> body = ErrorBodyFactory.generateBody(errorBody, 400);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
 }

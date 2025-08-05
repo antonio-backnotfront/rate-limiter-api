@@ -1,8 +1,13 @@
 package io.github.antonio.backnotfront.ratelimiter.controller;
 
+import io.github.antonio.backnotfront.ratelimiter.dto.request.LoginRequestDto;
+import io.github.antonio.backnotfront.ratelimiter.dto.request.RegisterRequestDto;
+import io.github.antonio.backnotfront.ratelimiter.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,15 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private final UserService service;
 
-    @GetMapping("signup")
-    public ResponseEntity<?> signup() {
+    public AuthController(UserService service) {
+        this.service = service;
+    }
 
+    @PostMapping("register")
+    public ResponseEntity<?> register(@RequestBody  @Valid RegisterRequestDto requestDto) {
         return new ResponseEntity<>("not implemented yet", HttpStatus.NOT_IMPLEMENTED);
     }
 
-    @GetMapping("signin")
-    public ResponseEntity<?> signin() {
-        return new ResponseEntity<>("not implemented yet", HttpStatus.NOT_IMPLEMENTED);
+    @PostMapping("login")
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDto requestDto) {
+        return new ResponseEntity<>(service.login(requestDto), HttpStatus.OK);
     }
 }

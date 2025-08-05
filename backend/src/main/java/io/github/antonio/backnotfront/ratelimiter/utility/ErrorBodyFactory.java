@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class ErrorBodyFactory {
 
-    public static Map<String, Object> generateBody(String error, Integer status){
+    public static Map<String, Object> generateBody(Object error, Integer status){
         Map<String, Object> body = new HashMap<>();
         body.put("status", status);
         body.put("error", error);
