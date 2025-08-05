@@ -2,7 +2,7 @@ package io.github.antonio.backnotfront.ratelimiter.utility;
 
 import io.github.antonio.backnotfront.ratelimiter.exception.UnauthorizedException;
 import io.github.antonio.backnotfront.ratelimiter.model.enums.TokenType;
-import io.github.antonio.backnotfront.ratelimiter.service.impl.MyUserDetailsService;
+import io.github.antonio.backnotfront.ratelimiter.service.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,7 +22,7 @@ import java.util.function.Function;
 public class JwtService {
 
     private final Logger logger;
-    private final MyUserDetailsService myUserDetailsService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
     @Value("${application.security.jwt.access-token-expiration}")
@@ -30,9 +30,9 @@ public class JwtService {
     @Value("${application.security.jwt.refresh-token-expiration}")
     private Long refreshTokenExpiration;
 
-    public JwtService(MyUserDetailsService myUserDetailsService) {
+    public JwtService(UserDetailsServiceImpl userDetailsServiceImpl) {
         this.logger = LoggerFactory.getLogger(JwtService.class);
-        this.myUserDetailsService = myUserDetailsService;
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
     }
 
     public SecretKey getKey() {
@@ -65,7 +65,7 @@ public class JwtService {
 
     public UserDetails extractUserDetails(String token) {
         String username = extractUsername(token);
-        return myUserDetailsService.loadUserByUsername(username);
+        return userDetailsServiceImpl.loadUserByUsername(username);
     }
 
     private String extractUsername(String token) {
