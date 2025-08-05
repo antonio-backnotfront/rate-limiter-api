@@ -213,3 +213,6 @@ gradle.properties
 
 ### env
 .env
+
+### unnecessary
+.jpb
