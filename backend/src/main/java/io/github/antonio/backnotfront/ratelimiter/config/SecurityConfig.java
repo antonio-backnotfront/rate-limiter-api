@@ -1,6 +1,7 @@
 package io.github.antonio.backnotfront.ratelimiter.config;
 
 import io.github.antonio.backnotfront.ratelimiter.filter.JwtAuthenticationFilter;
+import io.github.antonio.backnotfront.ratelimiter.handler.AuthenticationEntryPointHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -22,12 +24,16 @@ public class SecurityConfig {
 
     JwtAuthenticationFilter jwtAuthenticationFilter;
     UserDetailsService userDetailsService;
+    AuthenticationEntryPoint authenticationEntryPoint;
 
     public SecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
-            UserDetailsService userDetailsService) {
+            UserDetailsService userDetailsService,
+            AuthenticationEntryPoint authenticationEntryPoint
+    ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Bean
@@ -45,7 +51,10 @@ public class SecurityConfig {
                 )
                 .sessionManagement(sm ->
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(customizer ->
+                        customizer.authenticationEntryPoint(authenticationEntryPoint)
+                );
 
 
         return http.build();
