@@ -7,5 +7,5 @@ import io.github.antonio.backnotfront.ratelimiter.dto.response.RegisterResponseD
 
 public interface UserService {
     LoginResponseDto login(LoginRequestDto requestDto);
-    RegisterResponseDto login(RegisterRequestDto requestDto);
+    RegisterResponseDto register(RegisterRequestDto requestDto);
 }

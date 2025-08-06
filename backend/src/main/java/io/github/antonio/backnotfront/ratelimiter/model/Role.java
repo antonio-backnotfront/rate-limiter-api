@@ -1,11 +1,10 @@
 package io.github.antonio.backnotfront.ratelimiter.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import io.github.antonio.backnotfront.ratelimiter.model.enums.RoleEnum;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
 @Entity(name = "Role")
 @Getter
@@ -14,5 +13,6 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    @Enumerated(value = EnumType.STRING)
+    private RoleEnum name;
 }

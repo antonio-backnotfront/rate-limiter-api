@@ -1,7 +1,7 @@
 insert into role(id, name) values
-                           (1, 'user');
+                           (1, 'ROLE_USER');
 insert into role(id, name) values
-                           (2, 'admin');
+                           (2, 'ROLE_ADMIN');
 
 
 insert into user(email, password, role_id) values

@@ -22,8 +22,9 @@ public class AuthController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<?> register(@RequestBody  @Valid RegisterRequestDto requestDto) {
-        return new ResponseEntity<>("not implemented yet", HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterRequestDto requestDto) {
+        return new ResponseEntity<>(service.register(requestDto), HttpStatus.OK);
+
     }
 
     @PostMapping("login")

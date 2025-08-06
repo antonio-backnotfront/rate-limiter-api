@@ -1,7 +1,7 @@
 package io.github.antonio.backnotfront.ratelimiter.filter;
 
 import io.github.antonio.backnotfront.ratelimiter.exception.UnauthorizedException;
-import io.github.antonio.backnotfront.ratelimiter.model.enums.TokenType;
+import io.github.antonio.backnotfront.ratelimiter.model.enums.TokenTypeEnum;
 import io.github.antonio.backnotfront.ratelimiter.utility.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -35,14 +35,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
-        TokenType tokenType = null;
+        TokenTypeEnum tokenTypeEnum = null;
         UserDetails userDetails = null;
         String token = null;
 
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
             try {
-                tokenType = service.extractTokenType(token);
+                tokenTypeEnum = service.extractTokenType(token);
                 userDetails = service.extractUserDetails(token);
             } catch (UnauthorizedException e) {
                 logger.warn("Cannot parse jwt: {}", e.getMessage());
@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (
-                tokenType != null && tokenType.equals(TokenType.ACCESS)
+                tokenTypeEnum != null && tokenTypeEnum.equals(TokenTypeEnum.ACCESS)
                         && SecurityContextHolder.getContext().getAuthentication() != null) {
             System.out.println("entered 1");
             if (service.isTokenValid(token, userDetails)) {

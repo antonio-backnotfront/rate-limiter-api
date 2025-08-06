@@ -1,7 +1,7 @@
 package io.github.antonio.backnotfront.ratelimiter.utility;
 
 import io.github.antonio.backnotfront.ratelimiter.exception.UnauthorizedException;
-import io.github.antonio.backnotfront.ratelimiter.model.enums.TokenType;
+import io.github.antonio.backnotfront.ratelimiter.model.enums.TokenTypeEnum;
 import io.github.antonio.backnotfront.ratelimiter.service.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -41,14 +41,14 @@ public class JwtService {
     }
 
     public String generateAccessToken(UserDetails user) {
-        return generateToken(user, accessTokenExpiration, TokenType.fromString("access"));
+        return generateToken(user, accessTokenExpiration, TokenTypeEnum.fromString("access"));
     }
 
     public String generateRefreshToken(UserDetails user) {
-        return generateToken(user, refreshTokenExpiration, TokenType.fromString("refresh"));
+        return generateToken(user, refreshTokenExpiration, TokenTypeEnum.fromString("refresh"));
     }
 
-    private String generateToken(UserDetails user, long expiration, TokenType type) {
+    private String generateToken(UserDetails user, long expiration, TokenTypeEnum type) {
         return Jwts.builder()
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -73,9 +73,9 @@ public class JwtService {
     }
 
 
-    public TokenType extractTokenType(String token) {
+    public TokenTypeEnum extractTokenType(String token) {
         String typeString = extractClaim(token, e -> e.get("token_type", String.class));
-        if (typeString != null) return TokenType.fromString(typeString);
+        if (typeString != null) return TokenTypeEnum.fromString(typeString);
         return null;
     }
 
