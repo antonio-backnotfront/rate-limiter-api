@@ -216,3 +216,4 @@ gradle.properties
 
 ### unnecessary
 .jpb
+dump.rdb
