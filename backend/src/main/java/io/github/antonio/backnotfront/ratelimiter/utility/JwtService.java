@@ -102,7 +102,7 @@ public class JwtService {
                     .getPayload();
         } catch (JwtException e) {
             logger.warn("Failed to parse jwt: {}", e.getMessage());
-            throw new UnauthorizedException("Unauthorized: valid refresh token is required.");
+            throw new UnauthorizedException("Unauthorized: valid token is required.");
         }
     }
 

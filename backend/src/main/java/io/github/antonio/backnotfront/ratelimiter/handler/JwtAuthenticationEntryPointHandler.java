@@ -1,13 +1,10 @@
 package io.github.antonio.backnotfront.ratelimiter.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.std.JsonValueSerializer;
 import io.github.antonio.backnotfront.ratelimiter.utility.ErrorBodyFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.hibernate.type.format.jackson.JacksonJsonFormatMapper;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -15,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint {
+public class JwtAuthenticationEntryPointHandler implements AuthenticationEntryPoint {
     @Override
     public void commence(
             HttpServletRequest request,
