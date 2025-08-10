@@ -3,6 +3,7 @@ package io.github.antonio.backnotfront.ratelimiter.service.impl;
 import io.github.antonio.backnotfront.ratelimiter.dto.request.LoginRequestDto;
 import io.github.antonio.backnotfront.ratelimiter.dto.request.RegisterRequestDto;
 import io.github.antonio.backnotfront.ratelimiter.dto.response.LoginResponseDto;
+import io.github.antonio.backnotfront.ratelimiter.dto.response.RefreshResponseDto;
 import io.github.antonio.backnotfront.ratelimiter.dto.response.RegisterResponseDto;
 import io.github.antonio.backnotfront.ratelimiter.exception.ConflictException;
 import io.github.antonio.backnotfront.ratelimiter.exception.UnauthorizedException;
@@ -10,10 +11,12 @@ import io.github.antonio.backnotfront.ratelimiter.model.Role;
 import io.github.antonio.backnotfront.ratelimiter.model.User;
 import io.github.antonio.backnotfront.ratelimiter.model.UserPrincipal;
 import io.github.antonio.backnotfront.ratelimiter.model.enums.RoleEnum;
+import io.github.antonio.backnotfront.ratelimiter.model.enums.TokenTypeEnum;
 import io.github.antonio.backnotfront.ratelimiter.repository.impl.UserRepository;
 import io.github.antonio.backnotfront.ratelimiter.service.RoleService;
 import io.github.antonio.backnotfront.ratelimiter.service.UserService;
 import io.github.antonio.backnotfront.ratelimiter.utility.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
@@ -80,6 +83,25 @@ public class UserServiceImpl implements UserService {
 
         User createdUser = userRepository.save(user);
         return new RegisterResponseDto(createdUser.getId(), createdUser.getEmail());
+    }
+
+    @Override
+    public RefreshResponseDto refresh(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header == null || !header.startsWith("Bearer "))
+            rejectRefreshRequest();
+
+        String token = header.substring(7);
+        TokenTypeEnum tokenType =  jwtService.extractTokenType(token);
+        UserDetails userDetails = jwtService.extractUserDetails(token);
+        if (tokenType == null || tokenType != TokenTypeEnum.REFRESH || !jwtService.isTokenValid(token,userDetails))
+            rejectRefreshRequest();
+
+        return new RefreshResponseDto(jwtService.generateAccessToken(userDetails));
+    }
+
+    private void rejectRefreshRequest() {
+        throw new UnauthorizedException("Valid refresh token is required.");
     }
 
     private void rejectRegisterRequest() {

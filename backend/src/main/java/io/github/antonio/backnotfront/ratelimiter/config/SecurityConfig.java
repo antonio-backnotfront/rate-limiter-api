@@ -51,7 +51,7 @@ public class SecurityConfig {
                                 .requestMatchers("api/auth/**").permitAll()
                                 .requestMatchers("/actuator/health/**").permitAll()
                                 .requestMatchers("/actuator/info").permitAll()
-                                .anyRequest().hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(sm ->
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

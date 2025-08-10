@@ -3,6 +3,7 @@ package io.github.antonio.backnotfront.ratelimiter.controller;
 import io.github.antonio.backnotfront.ratelimiter.dto.request.LoginRequestDto;
 import io.github.antonio.backnotfront.ratelimiter.dto.request.RegisterRequestDto;
 import io.github.antonio.backnotfront.ratelimiter.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,10 @@ public class AuthController {
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDto requestDto) {
         return new ResponseEntity<>(service.login(requestDto), HttpStatus.OK);
+    }
+
+    @PostMapping("refresh")
+    public ResponseEntity<?> refresh(HttpServletRequest request) {
+        return new ResponseEntity<>(service.refresh(request), HttpStatus.OK);
     }
 }
