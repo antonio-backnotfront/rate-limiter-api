@@ -11,8 +11,13 @@ public class Policy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer capacity;
-    private Long windowSize;
+    private String endpointPattern = "/**";
+
+    // maximum number of requests per window
+    private Integer capacity = 100;
+
+    // in seconds
+    private Integer windowSize = 60;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
