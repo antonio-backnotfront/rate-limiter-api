@@ -4,6 +4,8 @@ import io.github.antonio.backnotfront.ratelimiter.repository.RateLimiterReposito
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.Duration;
+
 @Repository
 public class RedisRateLimiterRepository implements RateLimiterRepository {
 
@@ -16,6 +18,16 @@ public class RedisRateLimiterRepository implements RateLimiterRepository {
     @Override
     public Integer getTokenCount(String key) {
         return redisTemplate.opsForValue().get(key);
+    }
+
+    @Override
+    public void putTokenCountIfAbsent(String key, Integer value, Duration duration) {
+        redisTemplate.opsForValue().setIfAbsent(key, value, duration);
+    }
+
+    @Override
+    public void modifyTokenExpiration(String key, Duration duration) {
+        redisTemplate.expire(key, duration);
     }
 
     @Override

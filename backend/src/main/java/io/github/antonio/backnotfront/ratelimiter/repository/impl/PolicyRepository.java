@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PolicyRepository extends JpaRepository<Policy, Long> {
-    Optional<Policy> findPolicyById(Long id);
+public interface PolicyRepository extends JpaRepository<Policy, String> {
+    Optional<Policy> findPolicyById(String id);
+
     List<Policy> findPoliciesByUserId(Long userId);
 }

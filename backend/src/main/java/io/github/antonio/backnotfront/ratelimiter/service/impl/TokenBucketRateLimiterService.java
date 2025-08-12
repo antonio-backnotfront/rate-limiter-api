@@ -15,7 +15,7 @@ public class TokenBucketRateLimiterService implements RateLimiterService {
     }
 
     @Override
-    public boolean isAllowed(Long policyId, String userId) {
+    public boolean isAllowed(Long consumerId, String policyId, String user) {
         return false;
     }
 }
