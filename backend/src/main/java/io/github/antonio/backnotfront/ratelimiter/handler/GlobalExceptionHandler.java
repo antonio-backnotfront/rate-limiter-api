@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,10 +37,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleException(MethodArgumentNotValidException exception) {
         Map<String, String> errorBody = new HashMap<>();
-        for (FieldError error : exception.getFieldErrors()){
+        for (FieldError error : exception.getFieldErrors()) {
             errorBody.put(error.getField(), error.getDefaultMessage());
         }
         Map<String, Object> body = ErrorBodyFactory.generateBody(errorBody, 400);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleException(HttpMessageNotReadableException exception) {
+        Map<String, Object> body = ErrorBodyFactory.generateBody("Request body is required.", 400);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 

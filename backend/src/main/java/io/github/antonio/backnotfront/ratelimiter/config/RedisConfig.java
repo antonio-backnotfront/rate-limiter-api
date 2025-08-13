@@ -1,6 +1,8 @@
 package io.github.antonio.backnotfront.ratelimiter.config;
 
+import io.github.antonio.backnotfront.ratelimiter.dto.response.GetPolicyResponseDto;
 import io.github.antonio.backnotfront.ratelimiter.dto.response.LoginResponseDto;
+import io.github.antonio.backnotfront.ratelimiter.model.Policy;
 import io.github.antonio.backnotfront.ratelimiter.model.Role;
 import io.github.antonio.backnotfront.ratelimiter.model.User;
 import org.springframework.context.annotation.Bean;
@@ -45,11 +47,19 @@ public class RedisConfig {
                         new Jackson2JsonRedisSerializer<>(User.class)
                 ));
 
+        RedisCacheConfiguration policyCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                .disableCachingNullValues()
+                .entryTtl(Duration.ofHours(24))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
+                        new Jackson2JsonRedisSerializer<>(Policy.class)
+                ));
+
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
         configMap.put("LOGIN_RESPONSES", loginResponseCacheConfiguration);
         configMap.put("ROLES", roleCacheConfiguration);
         configMap.put("USERS", userCacheConfiguration);
-
+        configMap.put("POLICIES", policyCacheConfiguration);
+//
         return RedisCacheManager.builder(redisConnectionFactory)
                 .withInitialCacheConfigurations(configMap)
                 .build();

@@ -28,7 +28,7 @@ public class RateLimiterController {
         String userHeader = request.getHeader("X-USER");
 //        SecurityContextHolder.getContext().getAuthentication()
         try {
-            return new ResponseEntity<>(rateLimiterService.isAllowed(Long.parseLong(policyHeader), userHeader), HttpStatus.OK);
+            return new ResponseEntity<>("not implemented", HttpStatus.NOT_IMPLEMENTED);
         } catch (NumberFormatException e){
             throw new BadRequestException("X-POLICY-ID header must be a valid id of policy.");
         }
