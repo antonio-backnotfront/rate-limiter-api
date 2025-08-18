@@ -1,13 +1,15 @@
 package io.github.antonio.backnotfront.ratelimiter.repository;
 
+import io.github.antonio.backnotfront.ratelimiter.model.RateLimitCacheEntry;
+
 import java.time.Duration;
 
 public interface RateLimiterRepository {
-    Integer getTokenCount(String key);
+    RateLimitCacheEntry getCacheEntry(String key);
 
-    void putTokenCountIfAbsent(String key, Integer value, Duration duration);
+    void putCacheEntry(String key, Integer tokenCount, Duration duration);
 
-    void modifyTokenExpiration(String key, Duration duration);
+    void modifyCacheEntryExpiration(String key, Duration duration);
 
     void incrementToken(String key);
 
@@ -16,4 +18,6 @@ public interface RateLimiterRepository {
     void incrementTokenBy(String key, Integer value);
 
     void decrementTokenBy(String key, Integer value);
+
+    void updateLastRequest(String key, Long timestamp);
 }

@@ -32,7 +32,6 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-//    @Cacheable(value = "POLICIES", key = "#id")
     public GetPolicyResponseDto getPolicyById(String id) {
         Cache cache = cacheManager.getCache("POLICIES");
         Cache.ValueWrapper valueWrapper = cache.get(id);
@@ -61,7 +60,6 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-//    @CachePut(value = "POLICIES", key = "#result.id()")
     public CreatePolicyResponseDto createPolicy(CreatePolicyRequestDto requestDto) {
         Policy policy = new Policy();
         policy.setEndpointPattern(requestDto.endpointPattern());

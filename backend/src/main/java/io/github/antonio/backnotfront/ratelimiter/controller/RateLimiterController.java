@@ -1,14 +1,11 @@
 package io.github.antonio.backnotfront.ratelimiter.controller;
 
-import io.github.antonio.backnotfront.ratelimiter.exception.BadRequestException;
 import io.github.antonio.backnotfront.ratelimiter.service.RateLimiterService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.CurrentSecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,15 +19,12 @@ public class RateLimiterController {
         this.rateLimiterService = rateLimiterService;
     }
 
-    @GetMapping("check")
-    public ResponseEntity<?> check(HttpServletRequest request) {
+    @PostMapping("check")
+    public ResponseEntity<?> check(HttpServletRequest request) throws InterruptedException {
         String policyHeader = request.getHeader("X-POLICY-ID");
         String userHeader = request.getHeader("X-USER");
-//        SecurityContextHolder.getContext().getAuthentication()
-        try {
-            return new ResponseEntity<>("not implemented", HttpStatus.NOT_IMPLEMENTED);
-        } catch (NumberFormatException e){
-            throw new BadRequestException("X-POLICY-ID header must be a valid id of policy.");
-        }
+        return new ResponseEntity<>(rateLimiterService.isAllowed(policyHeader, userHeader), HttpStatus.OK);
     }
 }
+
+

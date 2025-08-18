@@ -3,6 +3,7 @@ package io.github.antonio.backnotfront.ratelimiter.config;
 import io.github.antonio.backnotfront.ratelimiter.dto.response.GetPolicyResponseDto;
 import io.github.antonio.backnotfront.ratelimiter.dto.response.LoginResponseDto;
 import io.github.antonio.backnotfront.ratelimiter.model.Policy;
+import io.github.antonio.backnotfront.ratelimiter.model.RateLimitCacheEntry;
 import io.github.antonio.backnotfront.ratelimiter.model.Role;
 import io.github.antonio.backnotfront.ratelimiter.model.User;
 import org.springframework.context.annotation.Bean;
@@ -54,23 +55,34 @@ public class RedisConfig {
                         new Jackson2JsonRedisSerializer<>(Policy.class)
                 ));
 
+        RedisCacheConfiguration rateLimitCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                .disableCachingNullValues()
+                .entryTtl(Duration.ofHours(1))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
+                        new Jackson2JsonRedisSerializer<>(Integer.class)
+                ));
+
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
         configMap.put("LOGIN_RESPONSES", loginResponseCacheConfiguration);
         configMap.put("ROLES", roleCacheConfiguration);
         configMap.put("USERS", userCacheConfiguration);
         configMap.put("POLICIES", policyCacheConfiguration);
-//
+        configMap.put("LIMITER", rateLimitCacheConfiguration);
+
         return RedisCacheManager.builder(redisConnectionFactory)
                 .withInitialCacheConfigurations(configMap)
                 .build();
     }
 
     @Bean
-    public RedisTemplate redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate template = new RedisTemplate();
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.afterPropertiesSet();
         return template;
     }
 }

@@ -25,6 +25,6 @@ public class Policy {
     // in seconds
     private Integer windowSize = 60;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private User user;
 }
