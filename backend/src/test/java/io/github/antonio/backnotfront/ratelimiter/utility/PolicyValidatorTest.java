@@ -1,6 +1,5 @@
 package io.github.antonio.backnotfront.ratelimiter.utility;
 
-import io.github.antonio.backnotfront.ratelimiter.exception.BadRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,8 +7,6 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Test validation methods in PolicyValidator class")
 public class PolicyValidatorTest {
-
-
     @DisplayName("too big capacity => false")
     @Test
     public void testValidateCapacity_WhenTooBigCapacity_ShouldReturnFalse() {
